@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Тихая ночь</string>
+    <string name="pref_isServiceEnabledTitle">Включено</string>
+    <string name="pref_isServiceEnabledSummary">Включено: звук будет автоматически выключаться</string>
+    <string name="pref_silentModeStartAt">Время начала</string>
+    <string name="pref_silentModeEndAt">Время окончания</string>
+    <string name="pref_set">Установить</string>
+    <string name="pref_cancel">Отмена</string>
+</resources>
