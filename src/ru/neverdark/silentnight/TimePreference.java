@@ -29,7 +29,6 @@ public class TimePreference extends DialogPreference {
 
     public TimePreference(Context ctxt, AttributeSet attrs, int defStyle) {
         super(ctxt, attrs, defStyle);
-
         setPositiveButtonText(R.string.pref_set);
         setNegativeButtonText(R.string.pref_cancel);
         mCalendar = new GregorianCalendar();
@@ -61,7 +60,6 @@ public class TimePreference extends DialogPreference {
     @Override
     protected void onDialogClosed(boolean positiveResult) {
         super.onDialogClosed(positiveResult);
-
         if (positiveResult) {
             mCalendar.set(Calendar.HOUR_OF_DAY, mPicker.getCurrentHour());
             mCalendar.set(Calendar.MINUTE, mPicker.getCurrentMinute());
@@ -81,7 +79,6 @@ public class TimePreference extends DialogPreference {
 
     @Override
     protected void onSetInitialValue(boolean restoreValue, Object defaultValue) {
-
         if (restoreValue) {
             if (defaultValue == null) {
                 mCalendar.setTimeInMillis(getPersistedLong(System

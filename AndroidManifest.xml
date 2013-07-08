@@ -25,10 +25,7 @@
             </intent-filter>
         </activity>
 
-        <service
-            android:name="ru.neverdark.silentnight.SilentNightService"
-            android:process=":SilentNightService" >
-        </service>
+        <service android:name="ru.neverdark.silentnight.SilentNightService"/>
 
         <receiver android:name="BootBroadcastReceiver" >
             <intent-filter>

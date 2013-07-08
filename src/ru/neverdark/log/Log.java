@@ -4,7 +4,7 @@ public class Log {
     /** Key for logging in the LogCat */
     private static final String APP = "ru.neverdark.silentnight";
     /** true if DEBUG enabled or false if DEBUG disable */
-    private static final boolean DEBUG = true;
+    private static final boolean DEBUG = false;
 
     /**
      * Function logged message to the LogCat as information message

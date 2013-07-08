@@ -1,6 +1,5 @@
 package ru.neverdark.silentnight;
 
-import ru.neverdark.log.Log;
 import android.preference.Preference.OnPreferenceClickListener;
 import android.content.Intent;
 import android.os.Bundle;
@@ -26,9 +25,22 @@ public class MainActivity extends PreferenceActivity {
         mIsServiceEnabled = (CheckBoxPreference) findPreference(Constant.PREF_IS_SERVICE_ENABLED);
         mSilentModeStartAt = (TimePreference) findPreference(Constant.PREF_SILENT_MODE_START_AT);
         mSilentModeEndAt = (TimePreference) findPreference(Constant.PREF_SILENT_MODE_END_AT);
-        mContactDeveloper = (Preference) findPreference(Constant.PREF_CONTACT_DEVELOPER);
+        mContactDeveloper = findPreference(Constant.PREF_CONTACT_DEVELOPER);
         updateView();
         setPreferencesClickListener();
+    }
+
+    /**
+     * Starts or stops the service, depending on the state of the
+     * isServiceEnabled checkbox
+     */
+    private void serviceControl() {
+        if (mIsServiceEnabled.isChecked()) {
+            
+            startService(new Intent(this, SilentNightService.class));
+        } else {
+            stopService(new Intent(this, SilentNightService.class));
+        }
     }
 
     /**
@@ -54,20 +66,6 @@ public class MainActivity extends PreferenceActivity {
                         return false;
                     }
                 });
-
-    }
-
-    /**
-     * Starts or stops the service, depending on the state of the
-     * isServiceEnabled checkbox
-     */
-    private void serviceControl() {
-        Log.message("serviceControl");
-        if (mIsServiceEnabled.isChecked()) {
-            startService(new Intent(this, SilentNightService.class));
-        } else {
-            stopService(new Intent(this, SilentNightService.class));
-        }
     }
 
     /**
@@ -88,7 +86,6 @@ public class MainActivity extends PreferenceActivity {
      * the isServiceEnabled checkbox
      */
     private void updateView() {
-        Log.message("updatePrefs");
         mSilentModeEndAt.setEnabled(!mIsServiceEnabled.isChecked());
         mSilentModeStartAt.setEnabled(!mIsServiceEnabled.isChecked());
     }

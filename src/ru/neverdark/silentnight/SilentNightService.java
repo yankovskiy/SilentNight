@@ -6,7 +6,6 @@ import java.util.Timer;
 import java.util.TimerTask;
 import java.util.concurrent.TimeUnit;
 
-import ru.neverdark.log.Log;
 import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
@@ -26,7 +25,6 @@ public class SilentNightService extends Service {
     private class Job extends TimerTask {
         @Override
         public void run() {
-            Log.message("run");
             /* get current time */
             Calendar calendar = new GregorianCalendar();
             AudioManager audioManager = (AudioManager) getSystemService(Context.AUDIO_SERVICE);
@@ -36,10 +34,8 @@ public class SilentNightService extends Service {
                     .get(Calendar.HOUR_OF_DAY)) {
                 if (calendar.get(Calendar.MINUTE) == mSilentModeStartAt
                         .get(Calendar.MINUTE)) {
-                    Log.message("mute");
-                    audioManager.setStreamMute(AudioManager.STREAM_RING, true);
-                    audioManager.setStreamMute(
-                            AudioManager.STREAM_NOTIFICATION, true);
+                    saveCurrentVolumeValues();
+                    turnOffSound();
                     /* Minute sleep to avoid re-mute sound */
                     try {
                         TimeUnit.SECONDS.sleep(MINUTE);
@@ -54,10 +50,14 @@ public class SilentNightService extends Service {
                     .get(Calendar.HOUR_OF_DAY)) {
                 if (calendar.get(Calendar.MINUTE) == mSilentModeEndAt
                         .get(Calendar.MINUTE)) {
-                    Log.message("unmute");
-                    audioManager.setStreamMute(AudioManager.STREAM_RING, false);
-                    audioManager.setStreamMute(
-                            AudioManager.STREAM_NOTIFICATION, false);
+
+                    /* restore volume only if user not change volume manually */
+                    if ((0 == audioManager
+                            .getStreamVolume(AudioManager.STREAM_RING))
+                            && (0 == audioManager
+                                    .getStreamVolume(AudioManager.STREAM_NOTIFICATION))) {
+                        turnOnSound();
+                    }
                     /* Minute sleep to avoid re-enable sound */
                     try {
                         TimeUnit.SECONDS.sleep(MINUTE);
@@ -69,9 +69,12 @@ public class SilentNightService extends Service {
         }
     }
 
+    private AudioManager audioManager;
     /* sleeping time for active job */
     private final byte MINUTE = 60;
     private boolean mIsServiceEnabled;
+    private int mPreviousNotificationVolume;
+    private int mPreviousRingVolume;
     private Calendar mSilentModeEndAt;
     private Calendar mSilentModeStartAt;
     private Timer mTimer;
@@ -83,7 +86,6 @@ public class SilentNightService extends Service {
      * Constructor
      */
     public SilentNightService() {
-        Log.message("SilentNightService.Constructor");
         mTimer = null;
         mSilentModeStartAt = new GregorianCalendar();
         mSilentModeEndAt = new GregorianCalendar();
@@ -102,22 +104,18 @@ public class SilentNightService extends Service {
      * Loads the preferences of the stored service control activity
      */
     private void loadPreferences() {
-        Log.message("loadPreferences");
         SharedPreferences sp = PreferenceManager
                 .getDefaultSharedPreferences(getApplicationContext());
+
         mSilentModeStartAt.setTimeInMillis(sp.getLong(
                 Constant.PREF_SILENT_MODE_START_AT, 0));
         mSilentModeEndAt.setTimeInMillis(sp.getLong(
                 Constant.PREF_SILENT_MODE_END_AT, 0));
         mIsServiceEnabled = sp.getBoolean(Constant.PREF_IS_SERVICE_ENABLED,
                 false);
-
-        Log.variable("mSilentModeStartAt",
-                mSilentModeStartAt.get(Calendar.HOUR_OF_DAY) + ":"
-                        + mSilentModeStartAt.get(Calendar.MINUTE));
-        Log.variable("mSilentModeEndAt",
-                mSilentModeEndAt.get(Calendar.HOUR_OF_DAY) + ":"
-                        + mSilentModeEndAt.get(Calendar.MINUTE));
+        mPreviousRingVolume = sp.getInt(Constant.PREF_PREVIOUS_RING_VOLUME, 0);
+        mPreviousNotificationVolume = sp.getInt(
+                Constant.PREF_PREVIOUS_NOTIFICATION_VOLUME, 0);
     }
 
     /*
@@ -127,7 +125,6 @@ public class SilentNightService extends Service {
      */
     @Override
     public IBinder onBind(Intent arg0) {
-        Log.message("SilentNightService.onBind");
         return null;
     }
 
@@ -138,9 +135,8 @@ public class SilentNightService extends Service {
      */
     @Override
     public void onCreate() {
-        Log.message("SilentNightService.onCreate");
         loadPreferences();
-
+        audioManager = (AudioManager) getSystemService(Context.AUDIO_SERVICE);
         /* Starts scheduler if service enabled or stopping service in other case */
         if (mIsServiceEnabled) {
             startScheduler();
@@ -156,7 +152,6 @@ public class SilentNightService extends Service {
      */
     @Override
     public void onDestroy() {
-        Log.message("SilentNightService.onDestroy");
         /* If time exists cancel and erase all active jobs */
         if (mTimer != null) {
             freeTimer();
@@ -170,16 +165,32 @@ public class SilentNightService extends Service {
      */
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
-        Log.message("SilentNightService.onStartCommand");
         /* Scheduling restart of crashed service */
         return START_STICKY;
+    }
+
+    /**
+     * Sets current volume values for ring and notification
+     */
+    private void saveCurrentVolumeValues() {
+        mPreviousRingVolume = audioManager
+                .getStreamVolume(AudioManager.STREAM_RING);
+        mPreviousNotificationVolume = audioManager
+                .getStreamVolume(AudioManager.STREAM_NOTIFICATION);
+        SharedPreferences sp = PreferenceManager
+                .getDefaultSharedPreferences(getApplicationContext());
+
+        SharedPreferences.Editor editor = sp.edit();
+        editor.putInt(Constant.PREF_PREVIOUS_RING_VOLUME, mPreviousRingVolume);
+        editor.putInt(Constant.PREF_PREVIOUS_NOTIFICATION_VOLUME,
+                mPreviousNotificationVolume);
+        editor.commit();
     }
 
     /**
      * Starts scheduler for automatically turn on and off device sound
      */
     private void startScheduler() {
-        Log.message("startScheduler");
         if (mTimer != null) {
             freeTimer();
         } else {
@@ -187,5 +198,19 @@ public class SilentNightService extends Service {
         }
         /* schedule task periodic 10 seconds */
         mTimer.scheduleAtFixedRate(new Job(), 0, PERIOD);
+    }
+
+    /**
+     * Turns off sound for ring and notification
+     */
+    private void turnOffSound() {
+        audioManager.setRingerMode(AudioManager.RINGER_MODE_SILENT);
+    }
+
+    /**
+     * Turns on sound for ring and notification
+     */
+    private void turnOnSound() {
+        audioManager.setRingerMode(AudioManager.RINGER_MODE_NORMAL);
     }
 }
