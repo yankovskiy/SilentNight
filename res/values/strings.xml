@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+
     <string name="app_name">Silent Night</string>
     <string name="pref_isServiceEnabledTitle">Enable</string>
     <string name="pref_isServiceEnabledSummary">Enabled: sound will be automatically muted</string>
@@ -7,4 +8,9 @@
     <string name="pref_silentModeEndAt">End time</string>
     <string name="pref_set">Set</string>
     <string name="pref_cancel">Cancel</string>
+    <string name="pref_contactDeveloperTitle">Contact developer</string>
+    <string name="pref_contactDeveloperSummary">Tell me about your problems</string>
+    <string name="pref_email">artemyankovskiy@gmail.com</string>
+    <string name="pref_selectEmailApplication">Select email application</string>
+
 </resources>

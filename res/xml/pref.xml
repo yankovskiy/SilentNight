@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android" >
     <CheckBoxPreference android:key="pref_isServiceEnabled" android:title="@string/pref_isServiceEnabledTitle" android:summary="@string/pref_isServiceEnabledSummary"/>
-    <ru.neverdark.silentnight.TimePreference android:key="pref_silentModeStartAt" android:title="@string/pref_silentModeStartAt"/>
-    <ru.neverdark.silentnight.TimePreference android:key="pref_silentModeEndAt" android:title="@string/pref_silentModeEndAt"/>
+    <ru.neverdark.silentnight.TimePreference android:layout="@layout/main" android:key="pref_silentModeStartAt" android:title="@string/pref_silentModeStartAt"/>
+    <ru.neverdark.silentnight.TimePreference android:layout="@layout/main" android:key="pref_silentModeEndAt" android:title="@string/pref_silentModeEndAt"/>
+    <Preference android:key="pref_contactDeveloper" android:title="@string/pref_contactDeveloperTitle" android:summary="@string/pref_contactDeveloperSummary" />
 </PreferenceScreen>

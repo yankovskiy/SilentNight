@@ -12,9 +12,12 @@ import android.util.AttributeSet;
 import android.view.View;
 import android.widget.TimePicker;
 
+/**
+ * Implements time selection dialog to service control activity
+ */
 public class TimePreference extends DialogPreference {
-    private Calendar calendar;
-    private TimePicker picker = null;
+    private Calendar mCalendar;
+    private TimePicker mPicker = null;
 
     public TimePreference(Context ctxt) {
         this(ctxt, null);
@@ -29,21 +32,30 @@ public class TimePreference extends DialogPreference {
 
         setPositiveButtonText(R.string.pref_set);
         setNegativeButtonText(R.string.pref_cancel);
-        calendar = new GregorianCalendar();
+        mCalendar = new GregorianCalendar();
     }
 
     @Override
-    protected View onCreateDialogView() {
-        picker = new TimePicker(getContext());
-        picker.setIs24HourView(true);
-        return (picker);
+    public CharSequence getSummary() {
+        if (mCalendar == null) {
+            return null;
+        }
+        return DateFormat.getTimeFormat(getContext()).format(
+                new Date(mCalendar.getTimeInMillis()));
     }
 
     @Override
     protected void onBindDialogView(View v) {
         super.onBindDialogView(v);
-        picker.setCurrentHour(calendar.get(Calendar.HOUR_OF_DAY));
-        picker.setCurrentMinute(calendar.get(Calendar.MINUTE));
+        mPicker.setCurrentHour(mCalendar.get(Calendar.HOUR_OF_DAY));
+        mPicker.setCurrentMinute(mCalendar.get(Calendar.MINUTE));
+    }
+
+    @Override
+    protected View onCreateDialogView() {
+        mPicker = new TimePicker(getContext());
+        mPicker.setIs24HourView(true);
+        return (mPicker);
     }
 
     @Override
@@ -51,12 +63,12 @@ public class TimePreference extends DialogPreference {
         super.onDialogClosed(positiveResult);
 
         if (positiveResult) {
-            calendar.set(Calendar.HOUR_OF_DAY, picker.getCurrentHour());
-            calendar.set(Calendar.MINUTE, picker.getCurrentMinute());
+            mCalendar.set(Calendar.HOUR_OF_DAY, mPicker.getCurrentHour());
+            mCalendar.set(Calendar.MINUTE, mPicker.getCurrentMinute());
 
             setSummary(getSummary());
-            if (callChangeListener(calendar.getTimeInMillis())) {
-                persistLong(calendar.getTimeInMillis());
+            if (callChangeListener(mCalendar.getTimeInMillis())) {
+                persistLong(mCalendar.getTimeInMillis());
                 notifyChanged();
             }
         }
@@ -72,25 +84,20 @@ public class TimePreference extends DialogPreference {
 
         if (restoreValue) {
             if (defaultValue == null) {
-                calendar.setTimeInMillis(getPersistedLong(System.currentTimeMillis()));
+                mCalendar.setTimeInMillis(getPersistedLong(System
+                        .currentTimeMillis()));
             } else {
-                calendar.setTimeInMillis(Long.parseLong(getPersistedString((String) defaultValue)));
+                mCalendar.setTimeInMillis(Long
+                        .parseLong(getPersistedString((String) defaultValue)));
             }
         } else {
             if (defaultValue == null) {
-                calendar.setTimeInMillis(System.currentTimeMillis());
+                mCalendar.setTimeInMillis(System.currentTimeMillis());
             } else {
-                calendar.setTimeInMillis(Long.parseLong((String) defaultValue));
+                mCalendar
+                        .setTimeInMillis(Long.parseLong((String) defaultValue));
             }
         }
         setSummary(getSummary());
     }
-
-    @Override
-    public CharSequence getSummary() {
-        if (calendar == null) {
-            return null;
-        }
-        return DateFormat.getTimeFormat(getContext()).format(new Date(calendar.getTimeInMillis()));
-    }
-} 
+}
