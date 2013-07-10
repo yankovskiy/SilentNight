@@ -2,7 +2,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="ru.neverdark.silentnight"
     android:versionCode="1"
-    android:versionName="0.1" >
+    android:versionName="0.1.1" >
 
     <uses-sdk
         android:minSdkVersion="5"
@@ -26,6 +26,8 @@
         </activity>
 
         <service android:name="ru.neverdark.silentnight.SilentNightService"/>
+        <service android:name="ru.neverdark.silentnight.DisableSoundService"/>
+        <service android:name="ru.neverdark.silentnight.EnableSoundService"/>
 
         <receiver android:name="BootBroadcastReceiver" >
             <intent-filter>

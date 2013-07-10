@@ -1,5 +1,6 @@
 package ru.neverdark.silentnight;
 
+import ru.neverdark.log.Log;
 import android.preference.Preference.OnPreferenceClickListener;
 import android.content.Intent;
 import android.os.Bundle;
@@ -35,12 +36,8 @@ public class MainActivity extends PreferenceActivity {
      * isServiceEnabled checkbox
      */
     private void serviceControl() {
-        if (mIsServiceEnabled.isChecked()) {
-            
-            startService(new Intent(this, SilentNightService.class));
-        } else {
-            stopService(new Intent(this, SilentNightService.class));
-        }
+        Log.message("serviceControl");
+        startService(new Intent(this, SilentNightService.class));
     }
 
     /**

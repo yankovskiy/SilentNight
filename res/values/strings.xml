@@ -9,7 +9,7 @@
     <string name="pref_set">Set</string>
     <string name="pref_cancel">Cancel</string>
     <string name="pref_contactDeveloperTitle">Contact developer</string>
-    <string name="pref_contactDeveloperSummary">Tell me about your problems</string>
+    <string name="pref_contactDeveloperSummary">Tell me about your problems with program</string>
     <string name="pref_email">artemyankovskiy@gmail.com</string>
     <string name="pref_selectEmailApplication">Select email application</string>
 
