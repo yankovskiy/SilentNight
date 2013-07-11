@@ -97,7 +97,7 @@ public class SilentNightService extends Service {
             calendarPlan.add(Calendar.DATE, 1);
         }
         
-        mAlarmManager.setRepeating(AlarmManager.RTC,
+        mAlarmManager.setRepeating(AlarmManager.RTC_WAKEUP,
                 calendarPlan.getTimeInMillis(),
                 AlarmManager.INTERVAL_DAY, pengingIntent);
     }
