@@ -17,13 +17,12 @@ import android.preference.PreferenceManager;
  */
 public class SilentNightService extends Service {
 
+    private AlarmManager mAlarmManager;
     private boolean mIsServiceEnabled;
+    private PendingIntent mPendingIntentDisabler;
+    private PendingIntent mPendingIntentEnabler;
     private Calendar mSilentModeEndAt;
     private Calendar mSilentModeStartAt;
-    private PendingIntent pendingIntentEnabler;
-    private AlarmManager alarmManagerEnabler;
-    private PendingIntent pendingIntentDisabler;
-    private AlarmManager alarmManagerDisabler;
 
     /**
      * Constructor
@@ -81,21 +80,42 @@ public class SilentNightService extends Service {
     }
 
     /**
+     * Plans alarm for run in future
+     * @param pengingIntent PendingIntent for run special service
+     * @param calendar Calendar contains timee for run
+     */
+    private void planAlarm(PendingIntent pengingIntent, Calendar calendar) {
+        Log.message("planAlarm");
+        Calendar calendarNow = Calendar.getInstance();
+        Calendar calendarPlan = Calendar.getInstance();
+        
+        calendarPlan.set(Calendar.HOUR_OF_DAY, calendar.get(Calendar.HOUR_OF_DAY));
+        calendarPlan.set(Calendar.MINUTE, calendar.get(Calendar.MINUTE));
+        calendarPlan.set(Calendar.SECOND, 0);
+        
+        if (calendarPlan.before(calendarNow)) {
+            calendarPlan.add(Calendar.DATE, 1);
+        }
+        
+        mAlarmManager.setRepeating(AlarmManager.RTC,
+                calendarPlan.getTimeInMillis(),
+                AlarmManager.INTERVAL_DAY, pengingIntent);
+    }
+    
+    /**
      * Prepares alarm manager for use
      */
     private void prepareAlarms() {
         Log.message("prepareAlarms");
-        //Context context = getApplicationContext();
-        pendingIntentEnabler = PendingIntent.getService(this,
+        mPendingIntentEnabler = PendingIntent.getService(this,
                 0, new Intent(this, EnableSoundService.class),
                 0);
-        alarmManagerEnabler = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
-        
-        pendingIntentDisabler = PendingIntent.getService(this,
+
+        mPendingIntentDisabler = PendingIntent.getService(this,
                 0, new Intent(this, DisableSoundService.class),
                 0);
-        //        AlarmManager alarmManager = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
-        alarmManagerDisabler = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
+
+        mAlarmManager = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
     }
     
     /**
@@ -103,29 +123,11 @@ public class SilentNightService extends Service {
      */
     private void startScheduler() {
         Log.message("startScheduler");
-        
-        Calendar cal1 = Calendar.getInstance();
         /* Schedule task for automatically turn off sound */
-        cal1.set(Calendar.HOUR_OF_DAY, mSilentModeStartAt.get(Calendar.HOUR_OF_DAY));
-        cal1.set(Calendar.MINUTE, mSilentModeStartAt.get(Calendar.MINUTE));
-        cal1.set(Calendar.SECOND, 0);
-        Log.variable("HOUR", String.valueOf(cal1.get(Calendar.HOUR_OF_DAY)));
-        Log.variable("MINUTE", String.valueOf(cal1.get(Calendar.MINUTE)));
-        Log.variable("SECOND", String.valueOf(cal1.get(Calendar.SECOND)));
-        
-        alarmManagerDisabler.setRepeating(AlarmManager.RTC_WAKEUP,
-                cal1.getTimeInMillis(), 
-                AlarmManager.INTERVAL_DAY, pendingIntentDisabler);
+        planAlarm(mPendingIntentDisabler, mSilentModeStartAt);
         
         /* Schedule task for automatically turn on sound */
-        cal1.set(Calendar.HOUR_OF_DAY, mSilentModeEndAt.get(Calendar.HOUR_OF_DAY));
-        cal1.set(Calendar.MINUTE, mSilentModeEndAt.get(Calendar.MINUTE));
-        Log.variable("HOUR", String.valueOf(cal1.get(Calendar.HOUR_OF_DAY)));
-        Log.variable("MINUTE", String.valueOf(cal1.get(Calendar.MINUTE)));
-        Log.variable("SECOND", String.valueOf(cal1.get(Calendar.SECOND)));
-        alarmManagerEnabler.setRepeating(AlarmManager.RTC_WAKEUP,
-                cal1.getTimeInMillis(),
-                AlarmManager.INTERVAL_DAY, pendingIntentEnabler); 
+        planAlarm(mPendingIntentEnabler, mSilentModeEndAt);
     }
     
     /**
@@ -133,7 +135,7 @@ public class SilentNightService extends Service {
      */
     private void stopScheduler() {
         Log.message("stopScheduler");
-        alarmManagerEnabler.cancel(pendingIntentEnabler);
-        alarmManagerDisabler.cancel(pendingIntentDisabler);
+        mAlarmManager.cancel(mPendingIntentEnabler);
+        mAlarmManager.cancel(mPendingIntentDisabler);
     }
 }
