@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="ru.neverdark.silentnight"
-    android:versionCode="4"
-    android:versionName="0.1.3" >
+    android:versionCode="5"
+    android:versionName="0.1.4" >
 
     <uses-sdk
         android:minSdkVersion="4"
@@ -25,16 +25,15 @@
             </intent-filter>
         </activity>
 
-        <service android:name="ru.neverdark.silentnight.SilentNightService"/>
-        <service android:name="ru.neverdark.silentnight.DisableSoundService"/>
-        <service android:name="ru.neverdark.silentnight.EnableSoundService"/>
+        <service android:name="ru.neverdark.silentnight.SilentNightService" />
+        <service android:name="ru.neverdark.silentnight.DisableSoundService" />
+        <service android:name="ru.neverdark.silentnight.EnableSoundService" />
 
-        <receiver android:name="BootBroadcastReceiver" >
+        <receiver android:name="ru.neverdark.silentnight.BootBroadcastReceiver" >
             <intent-filter>
                 <action android:name="android.intent.action.BOOT_COMPLETED" />
             </intent-filter>
         </receiver>
-
     </application>
 
 </manifest>

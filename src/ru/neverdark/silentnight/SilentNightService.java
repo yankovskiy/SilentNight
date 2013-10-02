@@ -28,7 +28,7 @@ public class SilentNightService extends Service {
      * Constructor
      */
     public SilentNightService() {
-        Log.message("SilentNightService");
+        Log.message("Enter");
         mSilentModeStartAt = Calendar.getInstance();
         mSilentModeEndAt = Calendar.getInstance();
     }
@@ -37,7 +37,7 @@ public class SilentNightService extends Service {
      * Loads the preferences of the stored service control activity
      */
     private void loadPreferences() {
-        Log.message("loadPreferences");
+        Log.message("Enter");
         SharedPreferences sp = PreferenceManager
                 .getDefaultSharedPreferences(getApplicationContext());
 
@@ -66,7 +66,7 @@ public class SilentNightService extends Service {
      */
     @Override
     public void onCreate() {
-        Log.message("onCreate");
+        Log.message("Enter");
         loadPreferences();
         prepareAlarms();
         /* Starts scheduler if service enabled or stopping service in other case */
@@ -85,7 +85,7 @@ public class SilentNightService extends Service {
      * @param calendar Calendar contains timee for run
      */
     private void planAlarm(PendingIntent pengingIntent, Calendar calendar) {
-        Log.message("planAlarm");
+        Log.message("Enter");
         Calendar calendarNow = Calendar.getInstance();
         Calendar calendarPlan = Calendar.getInstance();
         
@@ -106,7 +106,7 @@ public class SilentNightService extends Service {
      * Prepares alarm manager for use
      */
     private void prepareAlarms() {
-        Log.message("prepareAlarms");
+        Log.message("Enter");
         mPendingIntentEnabler = PendingIntent.getService(this,
                 0, new Intent(this, EnableSoundService.class),
                 0);
@@ -122,7 +122,7 @@ public class SilentNightService extends Service {
      * Starts scheduler for automatically turn on and off device sound
      */
     private void startScheduler() {
-        Log.message("startScheduler");
+        Log.message("Enter");
         /* Schedule task for automatically turn off sound */
         planAlarm(mPendingIntentDisabler, mSilentModeStartAt);
         
@@ -134,7 +134,7 @@ public class SilentNightService extends Service {
      * Stops any schedule
      */
     private void stopScheduler() {
-        Log.message("stopScheduler");
+        Log.message("Enter");
         mAlarmManager.cancel(mPendingIntentEnabler);
         mAlarmManager.cancel(mPendingIntentDisabler);
     }
