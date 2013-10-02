@@ -83,8 +83,11 @@ public class MainActivity extends PreferenceActivity {
      * the isServiceEnabled checkbox
      */
     private void updateView() {
-        mSilentModeEndAt.setEnabled(!mIsServiceEnabled.isChecked());
-        mSilentModeStartAt.setEnabled(!mIsServiceEnabled.isChecked());
+        boolean enabled = !mIsServiceEnabled.isChecked();
+        mSilentModeEndAt.setEnabled(enabled);
+        mSilentModeStartAt.setEnabled(enabled);
     }
+    
+    
 
 }

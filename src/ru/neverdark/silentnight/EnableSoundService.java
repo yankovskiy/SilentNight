@@ -27,7 +27,7 @@ public class EnableSoundService extends Service {
      * Turns on sound for ring and notification
      */
     private void turnOnSound() {
-        Log.message("Enable sound");
+        Log.message("Enter");
         AudioManager audioManager = (AudioManager) getSystemService(Context.AUDIO_SERVICE);
         audioManager.setRingerMode(AudioManager.RINGER_MODE_NORMAL);
     }

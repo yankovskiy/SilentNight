@@ -27,7 +27,7 @@ public class DisableSoundService extends Service {
      * Turns off sound for ring and notification
      */
     private void turnOffSound() {
-        Log.message("Mute sound");
+        Log.message("Enter");
         AudioManager audioManager = (AudioManager) getSystemService(Context.AUDIO_SERVICE);
         audioManager.setRingerMode(AudioManager.RINGER_MODE_SILENT);
     }
