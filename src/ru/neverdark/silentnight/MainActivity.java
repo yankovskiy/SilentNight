@@ -18,6 +18,7 @@ package ru.neverdark.silentnight;
 import ru.neverdark.log.Log;
 import android.preference.Preference.OnPreferenceClickListener;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.preference.CheckBoxPreference;
 import android.preference.Preference;
@@ -29,9 +30,20 @@ import android.preference.PreferenceActivity;
 public class MainActivity extends PreferenceActivity {
 
     private Preference mContactDeveloper;
+    private Preference mRate;
     private CheckBoxPreference mIsServiceEnabled;
     private TimePreference mSilentModeEndAt;
     private TimePreference mSilentModeStartAt;
+
+    /**
+     * Opens market detail application page
+     */
+    private void gotoMarket() {
+        Intent marketIntent = new Intent(Intent.ACTION_VIEW);
+        marketIntent.setData(Uri
+                .parse("market://details?id=ru.neverdark.silentnight"));
+        startActivity(marketIntent);
+    }
 
     @SuppressWarnings("deprecation")
     @Override
@@ -42,6 +54,7 @@ public class MainActivity extends PreferenceActivity {
         mSilentModeStartAt = (TimePreference) findPreference(Constant.PREF_SILENT_MODE_START_AT);
         mSilentModeEndAt = (TimePreference) findPreference(Constant.PREF_SILENT_MODE_END_AT);
         mContactDeveloper = findPreference(Constant.PREF_CONTACT_DEVELOPER);
+        mRate = findPreference(Constant.PREF_RATE);
         updateView();
         setPreferencesClickListener();
     }
@@ -78,6 +91,16 @@ public class MainActivity extends PreferenceActivity {
                         return false;
                     }
                 });
+        
+        mRate.setOnPreferenceClickListener(new OnPreferenceClickListener() {
+
+            @Override
+            public boolean onPreferenceClick(Preference preference) {
+                gotoMarket();
+                return false;
+            }
+        });
+
     }
 
     /**
@@ -102,7 +125,5 @@ public class MainActivity extends PreferenceActivity {
         mSilentModeEndAt.setEnabled(enabled);
         mSilentModeStartAt.setEnabled(enabled);
     }
-    
-    
 
 }

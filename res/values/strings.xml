@@ -25,6 +25,8 @@
     <string name="pref_cancel">Cancel</string>
     <string name="pref_contactDeveloperTitle">Contact developer</string>
     <string name="pref_contactDeveloperSummary">Tell me about your problems with program</string>
+    <string name="pref_rateTitle">Rate</string>
+    <string name="pref_rateSummary">Rate program on the Google Play</string>
     <string name="pref_email">artemyankovskiy@gmail.com</string>
     <string name="pref_selectEmailApplication">Select email application</string>
 

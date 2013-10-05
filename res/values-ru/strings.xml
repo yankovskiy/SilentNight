@@ -25,7 +25,9 @@
     <string name="pref_cancel">Отмена</string>
     <string name="pref_contactDeveloperTitle">Написать разработчику</string>
     <string name="pref_contactDeveloperSummary">Расскажите мне о ваших проблемах с программой</string>
-    <string name="pref_selectEmailApplication">Выберете приложение для отправки email</string>
+    <string name="pref_rateTitle">Оценить</string>
+    <string name="pref_rateSummary">Поставить оценку программе</string>
+    <string name="pref_selectEmailApplication">Выберите приложение для отправки email</string>
     <string name="pref_email">artemyankovskiy@gmail.com</string>
     
 </resources>
