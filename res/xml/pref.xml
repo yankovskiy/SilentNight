@@ -18,6 +18,7 @@
     <CheckBoxPreference android:key="pref_isServiceEnabled" android:title="@string/pref_isServiceEnabledTitle" android:summary="@string/pref_isServiceEnabledSummary"/>
     <ru.neverdark.silentnight.TimePreference android:layout="@layout/main" android:key="pref_silentModeStartAt" android:title="@string/pref_silentModeStartAt"/>
     <ru.neverdark.silentnight.TimePreference android:layout="@layout/main" android:key="pref_silentModeEndAt" android:title="@string/pref_silentModeEndAt"/>
+    <CheckBoxPreference android:key="pref_airplaneMode" android:title="@string/pref_airplaneModeTitle" android:summary="@string/pref_airplaneModeSummary"/>
     <Preference android:key="pref_rate" android:title="@string/pref_rateTitle" android:summary="@string/pref_rateSummary" />
     <Preference android:key="pref_contactDeveloper" android:title="@string/pref_contactDeveloperTitle" android:summary="@string/pref_contactDeveloperSummary" />
 </PreferenceScreen>

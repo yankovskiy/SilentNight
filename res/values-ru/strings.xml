@@ -21,6 +21,8 @@
     <string name="pref_isServiceEnabledSummary">Включено: звук будет автоматически выключаться</string>
     <string name="pref_silentModeStartAt">Время начала</string>
     <string name="pref_silentModeEndAt">Время окончания</string>
+    <string name="pref_airplaneModeTitle">Режим в самолете</string>
+    <string name="pref_airplaneModeSummary">Режим в самолете включен</string>
     <string name="pref_set">Установить</string>
     <string name="pref_cancel">Отмена</string>
     <string name="pref_contactDeveloperTitle">Написать разработчику</string>

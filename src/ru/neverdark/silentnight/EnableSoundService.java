@@ -19,8 +19,10 @@ import ru.neverdark.log.Log;
 import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.media.AudioManager;
 import android.os.IBinder;
+import android.preference.PreferenceManager;
 
 /**
  * Enables sound on your device
@@ -31,13 +33,32 @@ public class EnableSoundService extends Service {
     public IBinder onBind(Intent intent) {
         return null;
     }
-    
+
     @Override
     public void onCreate() {
+        Log.message("Enter");
+        SharedPreferences sp = PreferenceManager
+                .getDefaultSharedPreferences(getApplicationContext());
+
+        if (sp.getBoolean(Constant.PREF_AIRPLANE_MODE, false)) {
+            disableAirplaneMode();
+        }
+
         turnOnSound();
         stopSelf();
     }
-    
+
+    /**
+     * Disables "Airplane mode"
+     */
+    private void disableAirplaneMode() {
+        Log.message("Enter");
+        AirplaneMode airplaneMode = new AirplaneMode(getApplicationContext());
+        if (airplaneMode.isEnabled()) {
+            airplaneMode.disable();
+        }
+    }
+
     /**
      * Turns on sound for ring and notification
      */

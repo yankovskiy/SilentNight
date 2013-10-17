@@ -21,6 +21,8 @@
     <string name="pref_isServiceEnabledSummary">Enabled: sound will be automatically muted</string>
     <string name="pref_silentModeStartAt">Start time</string>
     <string name="pref_silentModeEndAt">End time</string>
+    <string name="pref_airplaneModeTitle">Airplane mode</string>
+    <string name="pref_airplaneModeSummary">Airplane mode enabled</string>
     <string name="pref_set">Set</string>
     <string name="pref_cancel">Cancel</string>
     <string name="pref_contactDeveloperTitle">Contact developer</string>
