@@ -32,5 +32,4 @@
         android:textSize="14sp"
         android:textColor="?android:attr/textColorSecondary"
         android:paddingLeft="8dip"/>
-
 </LinearLayout>

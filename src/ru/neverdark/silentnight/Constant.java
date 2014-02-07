@@ -1,4 +1,5 @@
 /*******************************************************************************
+ * Copyright (C) 2014 Grégory Soutadé.
  * Copyright (C) 2013 Artem Yankovskiy (artemyankovskiy@gmail.com).
  *     This program is free software: you can redistribute it and/or modify
  *     it under the terms of the GNU General Public License as published by
@@ -21,5 +22,7 @@ public class Constant {
     public static final String PREF_SILENT_MODE_END_AT = "pref_silentModeEndAt";
     public static final String PREF_SILENT_MODE_START_AT = "pref_silentModeStartAt";
     public static final String PREF_AIRPLANE_MODE = "pref_airplaneMode";
+    public static final String PREF_DISABLE_SOUND = "pref_disableSound";
     public static final String PREF_RATE = "pref_rate";
+    public static final String PREF_SU_MODE = "pref_suMode";
 }

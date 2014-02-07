@@ -1,4 +1,5 @@
 /*******************************************************************************
+ * Copyright (C) 2014 Grégory Soutadé.
  * Copyright (C) 2013 Artem Yankovskiy (artemyankovskiy@gmail.com).
  *     This program is free software: you can redistribute it and/or modify
  *     it under the terms of the GNU General Public License as published by
@@ -19,10 +20,13 @@ import ru.neverdark.log.Log;
 import android.preference.Preference.OnPreferenceClickListener;
 import android.content.Intent;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.preference.CheckBoxPreference;
 import android.preference.Preference;
 import android.preference.PreferenceActivity;
+import android.preference.PreferenceFragment;
+import eu.chainfire.libsuperuser.Shell;
 
 /**
  * Service control activity
@@ -34,7 +38,32 @@ public class MainActivity extends PreferenceActivity {
     private CheckBoxPreference mIsServiceEnabled;
     private TimePreference mSilentModeEndAt;
     private TimePreference mSilentModeStartAt;
+    private CheckBoxPreference mSuMode;
+    private CheckBoxPreference mDisableSound;
 
+    public static class SettingsFragment extends PreferenceFragment {
+    	private MainActivity mOuter;
+    	    	
+        @Override
+        public void onCreate(Bundle savedInstanceState) {
+            super.onCreate(savedInstanceState);
+            // Load the preferences from an XML resource
+            addPreferencesFromResource(R.xml.pref);
+            mOuter.loadUI();
+            mOuter.updateView();
+            mOuter.setPreferencesClickListener();
+        }
+        public void setOuter(MainActivity outer) {mOuter = outer;}
+        public CheckBoxPreference getServiceEnabled() {return (CheckBoxPreference) findPreference(Constant.PREF_IS_SERVICE_ENABLED); }
+        public TimePreference getSilentModeStart() {return (TimePreference) findPreference(Constant.PREF_SILENT_MODE_START_AT);}
+        public TimePreference getSilentModeEnd() {return (TimePreference) findPreference(Constant.PREF_SILENT_MODE_END_AT);}
+        public Preference getContact() {return findPreference(Constant.PREF_CONTACT_DEVELOPER);}
+        public Preference getRate() {return findPreference(Constant.PREF_RATE);}
+        public CheckBoxPreference getSuMode() {return (CheckBoxPreference) findPreference(Constant.PREF_SU_MODE);}
+        public CheckBoxPreference getDisableSound() {return (CheckBoxPreference) findPreference(Constant.PREF_DISABLE_SOUND);}
+    }
+    
+    private SettingsFragment mSettings;
     /**
      * Opens market detail application page
      */
@@ -45,21 +74,18 @@ public class MainActivity extends PreferenceActivity {
         startActivity(marketIntent);
     }
 
-    @SuppressWarnings("deprecation")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        addPreferencesFromResource(R.xml.pref);
-        mIsServiceEnabled = (CheckBoxPreference) findPreference(Constant.PREF_IS_SERVICE_ENABLED);
-        mSilentModeStartAt = (TimePreference) findPreference(Constant.PREF_SILENT_MODE_START_AT);
-        mSilentModeEndAt = (TimePreference) findPreference(Constant.PREF_SILENT_MODE_END_AT);
-        mContactDeveloper = findPreference(Constant.PREF_CONTACT_DEVELOPER);
-        mRate = findPreference(Constant.PREF_RATE);
-        updateView();
-        setPreferencesClickListener();
+        // Display the fragment as the main content.
+        mSettings = new SettingsFragment();
+        mSettings.setOuter(this);
+        getFragmentManager().beginTransaction()
+                .replace(android.R.id.content, mSettings)
+                .commit();
     }
 
-    /**
+   /**
      * Starts or stops the service, depending on the state of the
      * isServiceEnabled checkbox
      */
@@ -117,6 +143,23 @@ public class MainActivity extends PreferenceActivity {
     }
 
     /**
+     * Load UI from preferences
+     */
+    private void loadUI()
+    {
+        mIsServiceEnabled = mSettings.getServiceEnabled();
+        mSilentModeStartAt = mSettings.getSilentModeStart();
+        mSilentModeEndAt = mSettings.getSilentModeEnd();
+        mContactDeveloper = mSettings.getContact();
+        mRate = mSettings.getRate();    	
+        mSuMode = mSettings.getSuMode();
+        mDisableSound = mSettings.getDisableSound();
+
+        if (!Shell.SU.available() || Build.VERSION.SDK_INT <= Build.VERSION_CODES.JELLY_BEAN_MR2)
+        	mSuMode.setEnabled(false);
+    }
+
+    /**
      * Updates view to disable / enable the components depending on the state of
      * the isServiceEnabled checkbox
      */
@@ -125,5 +168,4 @@ public class MainActivity extends PreferenceActivity {
         mSilentModeEndAt.setEnabled(enabled);
         mSilentModeStartAt.setEnabled(enabled);
     }
-
 }
