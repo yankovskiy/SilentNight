@@ -1,4 +1,5 @@
 /*******************************************************************************
+ * Copyright (C) 2014 Grégory Soutadé.
  * Copyright (C) 2013 Artem Yankovskiy (artemyankovskiy@gmail.com).
  *     This program is free software: you can redistribute it and/or modify
  *     it under the terms of the GNU General Public License as published by
@@ -16,10 +17,14 @@
 package ru.neverdark.silentnight;
 
 import ru.neverdark.log.Log;
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Build;
+import android.preference.PreferenceManager;
 import android.provider.Settings;
+import eu.chainfire.libsuperuser.Shell;
 
 /**
  * Turns on/off airplane mode
@@ -27,10 +32,14 @@ import android.provider.Settings;
 public class AirplaneMode {
 
     private static Context mContext;
+    private boolean mSuEnabled;
     
     public AirplaneMode(Context context) {
         Log.message("Enter");
         mContext = context;
+        SharedPreferences sp = PreferenceManager
+                .getDefaultSharedPreferences(context);
+        mSuEnabled = sp.getBoolean(Constant.PREF_AIRPLANE_MODE, false);
     }
 
     /**
@@ -55,12 +64,23 @@ public class AirplaneMode {
      */
     private boolean updateSystemSettings(boolean isEnabled) {
         Log.message("Enter");
-        // Toggle airplane mode.
-        setSettings(isEnabled ? 1 : 0);
-        // Post an intent to reload.
-        Intent intent = new Intent(Intent.ACTION_AIRPLANE_MODE_CHANGED);
-        intent.putExtra("state", isEnabled);
-        mContext.sendBroadcast(intent);
+    	// Toggle airplane mode.
+    	setSettings(isEnabled ? 1 : 0);
+        if (!mSuEnabled)
+        {
+        	// Post an intent to reload.
+        	Intent intent = new Intent(Intent.ACTION_AIRPLANE_MODE_CHANGED);
+        	intent.putExtra("state", isEnabled);
+        	mContext.sendBroadcast(intent);
+        }
+        else
+        {
+            //	http://stackoverflow.com/questions/15861046/how-to-toggle-airplane-mode-on-android-4-2-using-root
+        	if (isEnabled)
+        		Shell.SU.run("am broadcast -a android.intent.action.AIRPLANE_MODE --ez state true");
+        	else
+        		Shell.SU.run("am broadcast -a android.intent.action.AIRPLANE_MODE --ez state false");        	        	
+        }
         return true;
     }
 
@@ -68,29 +88,42 @@ public class AirplaneMode {
      * Checks whether the "airplane mode" 
      * @return true for "Airplane mode" enabled, false for disabled
      */
-    public boolean isEnabled() {
-        Log.message("Enter");
-        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.JELLY_BEAN_MR1) {
-            return Settings.System.getInt(mContext.getContentResolver(),
-                    Settings.System.AIRPLANE_MODE_ON, 0) != 0;
-        } else {
-            return Settings.Global.getInt(mContext.getContentResolver(),
-                    Settings.Global.AIRPLANE_MODE_ON, 0) != 0;
-        }
+    @SuppressLint("NewApi")
+	public boolean isEnabled() {
+       Log.message("Enter");
+       if (Build.VERSION.SDK_INT < Build.VERSION_CODES.JELLY_BEAN_MR1) {
+    	   return Settings.System.getInt(mContext.getContentResolver(),
+       				Settings.Global.AIRPLANE_MODE_ON, 0) != 0;
+       } else {
+    	   return Settings.Global.getInt(mContext.getContentResolver(),
+       				Settings.Global.AIRPLANE_MODE_ON, 0) != 0;
+       }
     }
 
     /**
      * Sets new "airplane mode"
      * @param value new "airplane mode". 0 - disable, 1 - enable
      */
-    private void setSettings(int value) {
+    @SuppressLint("NewApi")
+	private void setSettings(int value) {
         Log.message("Enter");
-        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.JELLY_BEAN_MR1) {
-            Settings.System.putInt(mContext.getContentResolver(),
-                    Settings.System.AIRPLANE_MODE_ON, value);
-        } else {
-            Settings.Global.putInt(mContext.getContentResolver(),
-                    Settings.Global.AIRPLANE_MODE_ON, value);
+        if (!mSuEnabled)
+        {
+        	if (Build.VERSION.SDK_INT < Build.VERSION_CODES.JELLY_BEAN_MR1) {
+        		Settings.System.putInt(mContext.getContentResolver(),
+        				Settings.Global.AIRPLANE_MODE_ON, value);
+        	} else if (Build.VERSION.SDK_INT <= Build.VERSION_CODES.JELLY_BEAN_MR2) {
+        		Settings.Global.putInt(mContext.getContentResolver(),
+        				Settings.Global.AIRPLANE_MODE_ON, value);
+        	}
+        }
+        else
+        {
+        //	http://stackoverflow.com/questions/15861046/how-to-toggle-airplane-mode-on-android-4-2-using-root
+        	if (value != 0)
+        		Shell.SU.run("settings put global airplane_mode_on 1");
+        	else
+        		Shell.SU.run("settings put global airplane_mode_on 0");        	
         }
     }
 }
