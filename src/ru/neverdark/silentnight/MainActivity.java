@@ -40,6 +40,7 @@ public class MainActivity extends PreferenceActivity {
     private TimePreference mSilentModeStartAt;
     private CheckBoxPreference mSuMode;
     private CheckBoxPreference mDisableSound;
+    private CheckBoxPreference mAirplaneMode;
 
     public static class SettingsFragment extends PreferenceFragment {
     	private MainActivity mOuter;
@@ -61,6 +62,7 @@ public class MainActivity extends PreferenceActivity {
         public Preference getRate() {return findPreference(Constant.PREF_RATE);}
         public CheckBoxPreference getSuMode() {return (CheckBoxPreference) findPreference(Constant.PREF_SU_MODE);}
         public CheckBoxPreference getDisableSound() {return (CheckBoxPreference) findPreference(Constant.PREF_DISABLE_SOUND);}
+        public CheckBoxPreference getAirplaneMode() {return (CheckBoxPreference) findPreference(Constant.PREF_AIRPLANE_MODE);}
     }
     
     private SettingsFragment mSettings;
@@ -110,7 +112,6 @@ public class MainActivity extends PreferenceActivity {
 
         mContactDeveloper
                 .setOnPreferenceClickListener(new OnPreferenceClickListener() {
-
                     @Override
                     public boolean onPreferenceClick(Preference preference) {
                         showContactDeveloperIntent();
@@ -119,7 +120,6 @@ public class MainActivity extends PreferenceActivity {
                 });
         
         mRate.setOnPreferenceClickListener(new OnPreferenceClickListener() {
-
             @Override
             public boolean onPreferenceClick(Preference preference) {
                 gotoMarket();
@@ -127,6 +127,14 @@ public class MainActivity extends PreferenceActivity {
             }
         });
 
+        mSuMode
+        .setOnPreferenceClickListener(new OnPreferenceClickListener() {
+            @Override
+            public boolean onPreferenceClick(Preference preference) {
+                updateView();
+                return false;
+            }
+        });
     }
 
     /**
@@ -154,9 +162,10 @@ public class MainActivity extends PreferenceActivity {
         mRate = mSettings.getRate();    	
         mSuMode = mSettings.getSuMode();
         mDisableSound = mSettings.getDisableSound();
-
+        mAirplaneMode = mSettings.getAirplaneMode();
+        
         if (!Shell.SU.available() || Build.VERSION.SDK_INT <= Build.VERSION_CODES.JELLY_BEAN_MR2)
-        	mSuMode.setEnabled(false);
+        	mSuMode.setEnabled(false);        
     }
 
     /**
@@ -167,5 +176,12 @@ public class MainActivity extends PreferenceActivity {
         boolean enabled = !mIsServiceEnabled.isChecked();
         mSilentModeEndAt.setEnabled(enabled);
         mSilentModeStartAt.setEnabled(enabled);
+        if (!mSuMode.isChecked() && Build.VERSION.SDK_INT > Build.VERSION_CODES.JELLY_BEAN_MR2)
+        {
+        	mAirplaneMode.setEnabled(false);
+        	mAirplaneMode.setChecked(false);
+        }
+        else
+        	mAirplaneMode.setEnabled(true);
     }
 }

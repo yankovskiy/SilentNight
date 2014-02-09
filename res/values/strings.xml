@@ -32,7 +32,7 @@
     <string name="pref_email">artemyankovskiy@gmail.com</string>
     <string name="pref_selectEmailApplication">Select email application</string>
     <string name="pref_suModeTitle">SU</string>
-    <string name="pref_suModeSummary">Becomes root before airplane mode switch (mandatory for Android &gt;= 4.3, need a rooted phone)</string>
+    <string name="pref_suModeSummary">Becomes root before airplane mode switch (mandatory for Android &gt; 4.3, need a rooted phone)</string>
     <string name="pref_disableSoundTitle">Sound off</string>
     <string name="pref_disableSoundSummary">Turn off sound</string>
 

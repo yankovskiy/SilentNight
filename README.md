@@ -1,6 +1,6 @@
 SilentNight
 ===========
-Silent Night is a program for Android to automatically (on the schedule) on and off the sound/airplane mode on your device.
+Silent Night is a program for Android to automatically (on the schedule) on and off the sound on your device.
 
 Getting binary
 -----------
