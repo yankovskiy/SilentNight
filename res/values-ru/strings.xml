@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!--
-  Copyright (C) 2013 Artem Yankovskiy (artemyankovskiy@gmail.com).
+  Copyright (C) 2013-2014 Artem Yankovskiy (artemyankovskiy@gmail.com).
       This program is free software: you can redistribute it and/or modify
       it under the terms of the GNU General Public License as published by
       the Free Software Foundation, either version 3 of the License, or
@@ -15,10 +15,9 @@
       along with this program.  If not, see <http://www.gnu.org/licenses/>.
 -->
 <resources>
-
     <string name="app_name">Silent Night</string>
     <string name="pref_isServiceEnabledTitle">Включено</string>
-    <string name="pref_isServiceEnabledSummary">Включено: звук будет автоматически выключаться</string>
+    <string name="pref_isServiceEnabledSummary">Включить Silent Night</string>
     <string name="pref_silentModeStartAt">Время начала</string>
     <string name="pref_silentModeEndAt">Время окончания</string>
     <string name="pref_airplaneModeTitle">Режим в самолете</string>
@@ -31,5 +30,8 @@
     <string name="pref_rateSummary">Поставить оценку программе</string>
     <string name="pref_selectEmailApplication">Выберите приложение для отправки email</string>
     <string name="pref_email">artemyankovskiy@gmail.com</string>
-    
+    <string name="pref_suModeTitle">SU</string>
+    <string name="pref_suModeSummary">Начиная с Android 4.2 нужны права root для включения режима \"В самолете\" </string>
+    <string name="pref_disableSoundTitle">Выключать звук</string>
+    <string name="pref_disableSoundSummary">Звук будет выключен в назначенное время</string>
 </resources>

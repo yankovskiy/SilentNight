@@ -1,6 +1,6 @@
 /*******************************************************************************
  * Copyright (C) 2014 Grégory Soutadé.
- * Copyright (C) 2013 Artem Yankovskiy (artemyankovskiy@gmail.com).
+ * Copyright (C) 2013-2014 Artem Yankovskiy (artemyankovskiy@gmail.com).
  *     This program is free software: you can redistribute it and/or modify
  *     it under the terms of the GNU General Public License as published by
  *     the Free Software Foundation, either version 3 of the License, or
@@ -39,12 +39,11 @@ public class MainActivity extends PreferenceActivity {
     private TimePreference mSilentModeEndAt;
     private TimePreference mSilentModeStartAt;
     private CheckBoxPreference mSuMode;
-    private CheckBoxPreference mDisableSound;
     private CheckBoxPreference mAirplaneMode;
 
     public static class SettingsFragment extends PreferenceFragment {
-    	private MainActivity mOuter;
-    	    	
+        private MainActivity mOuter;
+
         @Override
         public void onCreate(Bundle savedInstanceState) {
             super.onCreate(savedInstanceState);
@@ -54,18 +53,46 @@ public class MainActivity extends PreferenceActivity {
             mOuter.updateView();
             mOuter.setPreferencesClickListener();
         }
-        public void setOuter(MainActivity outer) {mOuter = outer;}
-        public CheckBoxPreference getServiceEnabled() {return (CheckBoxPreference) findPreference(Constant.PREF_IS_SERVICE_ENABLED); }
-        public TimePreference getSilentModeStart() {return (TimePreference) findPreference(Constant.PREF_SILENT_MODE_START_AT);}
-        public TimePreference getSilentModeEnd() {return (TimePreference) findPreference(Constant.PREF_SILENT_MODE_END_AT);}
-        public Preference getContact() {return findPreference(Constant.PREF_CONTACT_DEVELOPER);}
-        public Preference getRate() {return findPreference(Constant.PREF_RATE);}
-        public CheckBoxPreference getSuMode() {return (CheckBoxPreference) findPreference(Constant.PREF_SU_MODE);}
-        public CheckBoxPreference getDisableSound() {return (CheckBoxPreference) findPreference(Constant.PREF_DISABLE_SOUND);}
-        public CheckBoxPreference getAirplaneMode() {return (CheckBoxPreference) findPreference(Constant.PREF_AIRPLANE_MODE);}
+
+        public void setOuter(MainActivity outer) {
+            mOuter = outer;
+        }
+
+        public CheckBoxPreference getServiceEnabled() {
+            return (CheckBoxPreference) findPreference(Constant.PREF_IS_SERVICE_ENABLED);
+        }
+
+        public TimePreference getSilentModeStart() {
+            return (TimePreference) findPreference(Constant.PREF_SILENT_MODE_START_AT);
+        }
+
+        public TimePreference getSilentModeEnd() {
+            return (TimePreference) findPreference(Constant.PREF_SILENT_MODE_END_AT);
+        }
+
+        public Preference getContact() {
+            return findPreference(Constant.PREF_CONTACT_DEVELOPER);
+        }
+
+        public Preference getRate() {
+            return findPreference(Constant.PREF_RATE);
+        }
+
+        public CheckBoxPreference getSuMode() {
+            return (CheckBoxPreference) findPreference(Constant.PREF_SU_MODE);
+        }
+
+        public CheckBoxPreference getDisableSound() {
+            return (CheckBoxPreference) findPreference(Constant.PREF_DISABLE_SOUND);
+        }
+
+        public CheckBoxPreference getAirplaneMode() {
+            return (CheckBoxPreference) findPreference(Constant.PREF_AIRPLANE_MODE);
+        }
     }
-    
+
     private SettingsFragment mSettings;
+
     /**
      * Opens market detail application page
      */
@@ -83,11 +110,10 @@ public class MainActivity extends PreferenceActivity {
         mSettings = new SettingsFragment();
         mSettings.setOuter(this);
         getFragmentManager().beginTransaction()
-                .replace(android.R.id.content, mSettings)
-                .commit();
+                .replace(android.R.id.content, mSettings).commit();
     }
 
-   /**
+    /**
      * Starts or stops the service, depending on the state of the
      * isServiceEnabled checkbox
      */
@@ -118,7 +144,7 @@ public class MainActivity extends PreferenceActivity {
                         return false;
                     }
                 });
-        
+
         mRate.setOnPreferenceClickListener(new OnPreferenceClickListener() {
             @Override
             public boolean onPreferenceClick(Preference preference) {
@@ -127,8 +153,7 @@ public class MainActivity extends PreferenceActivity {
             }
         });
 
-        mSuMode
-        .setOnPreferenceClickListener(new OnPreferenceClickListener() {
+        mSuMode.setOnPreferenceClickListener(new OnPreferenceClickListener() {
             @Override
             public boolean onPreferenceClick(Preference preference) {
                 updateView();
@@ -153,19 +178,20 @@ public class MainActivity extends PreferenceActivity {
     /**
      * Load UI from preferences
      */
-    private void loadUI()
-    {
+    private void loadUI() {
         mIsServiceEnabled = mSettings.getServiceEnabled();
         mSilentModeStartAt = mSettings.getSilentModeStart();
         mSilentModeEndAt = mSettings.getSilentModeEnd();
         mContactDeveloper = mSettings.getContact();
-        mRate = mSettings.getRate();    	
+        mRate = mSettings.getRate();
         mSuMode = mSettings.getSuMode();
-        mDisableSound = mSettings.getDisableSound();
         mAirplaneMode = mSettings.getAirplaneMode();
-        
-        if (!Shell.SU.available() || Build.VERSION.SDK_INT <= Build.VERSION_CODES.JELLY_BEAN_MR2)
-        	mSuMode.setEnabled(false);        
+
+        // if Android less 4.2 or SU does not available
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.JELLY_BEAN_MR1
+                || !Shell.SU.available()) {
+            mSuMode.setEnabled(false);
+        }
     }
 
     /**
@@ -176,12 +202,14 @@ public class MainActivity extends PreferenceActivity {
         boolean enabled = !mIsServiceEnabled.isChecked();
         mSilentModeEndAt.setEnabled(enabled);
         mSilentModeStartAt.setEnabled(enabled);
-        if (!mSuMode.isChecked() && Build.VERSION.SDK_INT > Build.VERSION_CODES.JELLY_BEAN_MR2)
-        {
-        	mAirplaneMode.setEnabled(false);
-        	mAirplaneMode.setChecked(false);
-        }
-        else
-        	mAirplaneMode.setEnabled(true);
+
+        // if SU mode is not enabled and we have android 4.2+
+        // disable airplane mode
+        if (!mSuMode.isChecked()
+                && Build.VERSION.SDK_INT > Build.VERSION_CODES.JELLY_BEAN) {
+            mAirplaneMode.setEnabled(false);
+            mAirplaneMode.setChecked(false);
+        } else
+            mAirplaneMode.setEnabled(true);
     }
 }
