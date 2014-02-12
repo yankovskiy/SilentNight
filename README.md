@@ -8,4 +8,4 @@ You can get latest stable build [here](https://play.google.com/store/apps/detail
 
 On your device, you need allow installation of apps from sources other than the Google Play.
 
-Airplane need a rooted phone for Android > 4.3
+Airplane need a rooted phone for Android > 4.1
