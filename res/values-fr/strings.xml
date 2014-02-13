@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  Copyright (C) 2014 Grégory Soutadé.
+      This program is free software: you can redistribute it and/or modify
+      it under the terms of the GNU General Public License as published by
+      the Free Software Foundation, either version 3 of the License, or
+      (at your option) any later version.
+  
+      This program is distributed in the hope that it will be useful,
+      but WITHOUT ANY WARRANTY; without even the implied warranty of
+      MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+      GNU General Public License for more details.
+  
+      You should have received a copy of the GNU General Public License
+      along with this program.  If not, see <http://www.gnu.org/licenses/>.
+-->
+<resources>
+
+    <string name="app_name">Silent Night</string>
+    <string name="pref_isServiceEnabledTitle">Activer</string>
+    <string name="pref_isServiceEnabledSummary">Activer Silent Night</string>
+    <string name="pref_silentModeStartAt">Début</string>
+    <string name="pref_silentModeEndAt">Fin</string>
+    <string name="pref_airplaneModeTitle">Mode avion</string>
+    <string name="pref_airplaneModeSummary">Mode avion activé</string>
+    <string name="pref_set">OK</string>
+    <string name="pref_cancel">Annuler</string>
+    <string name="pref_contactDeveloperTitle">Contacter le développeur</string>
+    <string name="pref_contactDeveloperSummary">Faire un retour à propos de Silent Night</string>
+    <string name="pref_rateTitle">Noter</string>
+    <string name="pref_rateSummary">Noter Silent Night sur Google Play</string>
+    <string name="pref_email">artemyankovskiy@gmail.com</string>
+    <string name="pref_selectEmailApplication">Choisissez un logiciel d\'email</string>
+    <string name="pref_suModeTitle">SU</string>
+    <string name="pref_suModeSummary">Devenir super-utilisateur avant de passer en mode avion (obligatoire pour Android 4.2+, nécessite un téléphone rooté)</string>
+    <string name="pref_disableSoundTitle">Son off</string>
+    <string name="pref_disableSoundSummary">Couper le son</string>
+
+</resources>
