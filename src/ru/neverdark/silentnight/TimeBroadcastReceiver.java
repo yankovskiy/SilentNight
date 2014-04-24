@@ -1,6 +1,5 @@
 /*******************************************************************************
- * Copyright (C) 2014 Grégory Soutadé.
- * Copyright (C) 2013-2014 Artem Yankovskiy (artemyankovskiy@gmail.com).
+ * Copyright (C) 2014 Artem Yankovskiy (artemyankovskiy@gmail.com).
  *     This program is free software: you can redistribute it and/or modify
  *     it under the terms of the GNU General Public License as published by
  *     the Free Software Foundation, either version 3 of the License, or
@@ -16,13 +15,22 @@
  ******************************************************************************/
 package ru.neverdark.silentnight;
 
-public class Constant {
-    public static final String PREF_CONTACT_DEVELOPER = "pref_contactDeveloper";
-    public static final String PREF_IS_SERVICE_ENABLED = "pref_isServiceEnabled";
-    public static final String PREF_SILENT_MODE_END_AT = "pref_silentModeEndAt2";
-    public static final String PREF_SILENT_MODE_START_AT = "pref_silentModeStartAt2";
-    public static final String PREF_AIRPLANE_MODE = "pref_airplaneMode";
-    public static final String PREF_DISABLE_SOUND = "pref_disableSound";
-    public static final String PREF_RATE = "pref_rate";
-    public static final String PREF_SU_MODE = "pref_suMode";
+import ru.neverdark.log.Log;
+import android.content.BroadcastReceiver;
+import android.content.Context;
+import android.content.Intent;
+import android.widget.Toast;
+
+/**
+ * Class for receive android.intent.action.BOOT_COMPLETED
+ */
+public class TimeBroadcastReceiver extends BroadcastReceiver {
+
+    @Override
+    public void onReceive(Context context, Intent intent) {
+        /* we receive BOOT_COMPLETED message, start our service */
+        Log.message("Enter");
+        context.startService(new Intent(context, SilentNightService.class));
+    }
+
 }

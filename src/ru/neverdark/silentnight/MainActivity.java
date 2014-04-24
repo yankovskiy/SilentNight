@@ -16,9 +16,13 @@
  ******************************************************************************/
 package ru.neverdark.silentnight;
 
+import java.util.Calendar;
+
 import ru.neverdark.log.Log;
 import android.preference.Preference.OnPreferenceClickListener;
 import android.content.Intent;
+import android.content.SharedPreferences;
+import android.content.SharedPreferences.Editor;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
@@ -26,6 +30,7 @@ import android.preference.CheckBoxPreference;
 import android.preference.Preference;
 import android.preference.PreferenceActivity;
 import android.preference.PreferenceFragment;
+import android.preference.PreferenceManager;
 import eu.chainfire.libsuperuser.Shell;
 
 /**
@@ -106,11 +111,45 @@ public class MainActivity extends PreferenceActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        convertOldPrefs();
         // Display the fragment as the main content.
         mSettings = new SettingsFragment();
         mSettings.setOuter(this);
         getFragmentManager().beginTransaction()
                 .replace(android.R.id.content, mSettings).commit();
+    }
+
+    private void convertOldPrefs() {
+        final String oldEndAt = "pref_silentModeEndAt";
+        final String oldStartAt = "pref_silentModeStartAt";
+
+        SharedPreferences sp = PreferenceManager
+                .getDefaultSharedPreferences(getApplicationContext());
+        long endTime = sp.getLong(oldEndAt, 0);
+        long startTime = sp.getLong(oldStartAt, 0);
+
+        if (endTime != 0 && startTime != 0) {
+            Editor editor = sp.edit();
+            editor.remove(oldEndAt);
+            editor.remove(oldStartAt);
+
+            Calendar endCal = Calendar.getInstance();
+            endCal.setTimeInMillis(endTime);
+
+            Calendar startCal = Calendar.getInstance();
+            startCal.setTimeInMillis(startTime);
+
+            int start = (startCal.get(Calendar.HOUR_OF_DAY))
+                    | (startCal.get(Calendar.MINUTE) << 8);
+
+            int end = (endCal.get(Calendar.HOUR_OF_DAY))
+                    | (endCal.get(Calendar.MINUTE) << 8);
+
+            editor.putInt(Constant.PREF_SILENT_MODE_START_AT, start);
+            editor.putInt(Constant.PREF_SILENT_MODE_END_AT, end);
+
+            editor.commit();
+        }
     }
 
     /**

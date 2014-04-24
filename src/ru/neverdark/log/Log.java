@@ -22,7 +22,7 @@ import android.os.Environment;
 
 public class Log {
     /** true if DEBUG enabled or false if DEBUG disable */
-    private static final boolean DEBUG = false;
+    private static final boolean DEBUG = true;
     /** true if write log to file or false in other case */
     private static final boolean WRITE_FILE = false;
 

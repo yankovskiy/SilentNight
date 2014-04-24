@@ -33,6 +33,7 @@ import android.widget.TimePicker;
 public class TimePreference extends DialogPreference {
     private Calendar mCalendar;
     private TimePicker mPicker = null;
+    public static final int MASK = 255;
 
     public TimePreference(Context ctxt) {
         this(ctxt, null);
@@ -81,7 +82,9 @@ public class TimePreference extends DialogPreference {
 
             setSummary(getSummary());
             if (callChangeListener(mCalendar.getTimeInMillis())) {
-                persistLong(mCalendar.getTimeInMillis());
+                int time = (mCalendar.get(Calendar.HOUR_OF_DAY))
+                        | (mCalendar.get(Calendar.MINUTE) << 8);
+                persistInt(time);
                 notifyChanged();
             }
         }
@@ -94,20 +97,25 @@ public class TimePreference extends DialogPreference {
 
     @Override
     protected void onSetInitialValue(boolean restoreValue, Object defaultValue) {
+        int time = 0;
         if (restoreValue) {
-            if (defaultValue == null) {
-                mCalendar.setTimeInMillis(getPersistedLong(System
-                        .currentTimeMillis()));
+            time = getPersistedInt(0);
+
+            if (time == 0) {
+                mCalendar.setTimeInMillis(System.currentTimeMillis());
             } else {
-                mCalendar.setTimeInMillis(Long
-                        .parseLong(getPersistedString((String) defaultValue)));
+                mCalendar.set(Calendar.HOUR_OF_DAY, MASK & time);
+                mCalendar.set(Calendar.MINUTE, MASK & time >>> 8);
             }
         } else {
             if (defaultValue == null) {
                 mCalendar.setTimeInMillis(System.currentTimeMillis());
+                time = (mCalendar.get(Calendar.HOUR_OF_DAY))
+                        | (mCalendar.get(Calendar.MINUTE) << 8);
             } else {
-                mCalendar
-                        .setTimeInMillis(Long.parseLong((String) defaultValue));
+                time = Integer.parseInt((String) defaultValue);
+                mCalendar.set(Calendar.HOUR_OF_DAY, MASK & time);
+                mCalendar.set(Calendar.MINUTE, MASK & time >>> 8);
             }
         }
         setSummary(getSummary());

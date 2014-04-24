@@ -55,11 +55,23 @@ public class SilentNightService extends Service {
         Log.message("Enter");
         SharedPreferences sp = PreferenceManager
                 .getDefaultSharedPreferences(getApplicationContext());
+        int startTime = sp.getInt(Constant.PREF_SILENT_MODE_START_AT, 0);
+        int entTime = sp.getInt(Constant.PREF_SILENT_MODE_END_AT, 0);
+        
+        if (startTime == 0) {
+            mSilentModeStartAt.setTimeInMillis(0);
+        } else {
+            mSilentModeStartAt.set(Calendar.HOUR_OF_DAY, TimePreference.MASK & startTime);
+            mSilentModeStartAt.set(Calendar.MINUTE, TimePreference.MASK & startTime >>> 8);
+        }
+        
+        if (entTime == 0) {
+            mSilentModeEndAt.setTimeInMillis(0);
+        } else {
+            mSilentModeEndAt.set(Calendar.HOUR_OF_DAY, TimePreference.MASK & entTime);
+            mSilentModeEndAt.set(Calendar.MINUTE, TimePreference.MASK & entTime >>> 8);
+        }
 
-        mSilentModeStartAt.setTimeInMillis(sp.getLong(
-                Constant.PREF_SILENT_MODE_START_AT, 0));
-        mSilentModeEndAt.setTimeInMillis(sp.getLong(
-                Constant.PREF_SILENT_MODE_END_AT, 0));
         mIsServiceEnabled = sp.getBoolean(Constant.PREF_IS_SERVICE_ENABLED,
                 false);
     }

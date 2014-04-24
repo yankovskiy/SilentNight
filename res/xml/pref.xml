@@ -17,8 +17,8 @@
 -->
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android" >
     <CheckBoxPreference android:key="pref_isServiceEnabled" android:title="@string/pref_isServiceEnabledTitle" android:summary="@string/pref_isServiceEnabledSummary"/>
-    <ru.neverdark.silentnight.TimePreference android:layout="@layout/main" android:key="pref_silentModeStartAt" android:title="@string/pref_silentModeStartAt"/>
-    <ru.neverdark.silentnight.TimePreference android:layout="@layout/main" android:key="pref_silentModeEndAt" android:title="@string/pref_silentModeEndAt"/>
+    <ru.neverdark.silentnight.TimePreference android:layout="@layout/main" android:key="pref_silentModeStartAt2" android:title="@string/pref_silentModeStartAt"/>
+    <ru.neverdark.silentnight.TimePreference android:layout="@layout/main" android:key="pref_silentModeEndAt2" android:title="@string/pref_silentModeEndAt"/>
     <CheckBoxPreference android:key="pref_disableSound" android:summary="@string/pref_disableSoundSummary" android:title="@string/pref_disableSoundTitle"/>
     <CheckBoxPreference android:key="pref_airplaneMode" android:title="@string/pref_airplaneModeTitle" android:summary="@string/pref_airplaneModeSummary"/>
     <CheckBoxPreference android:key="pref_suMode" android:title="@string/pref_suModeTitle" android:summary="@string/pref_suModeSummary" />
