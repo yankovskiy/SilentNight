@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  Copyright (C) 2016 Cláudio Faria.
+      This program is free software: you can redistribute it and/or modify
+      it under the terms of the GNU General Public License as published by
+      the Free Software Foundation, either version 3 of the License, or
+      (at your option) any later version.
+
+      This program is distributed in the hope that it will be useful,
+      but WITHOUT ANY WARRANTY; without even the implied warranty of
+      MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+      GNU General Public License for more details.
+
+      You should have received a copy of the GNU General Public License
+      along with this program.  If not, see <http://www.gnu.org/licenses/>.
+-->
+<resources>
+    <string name="app_name">Silent Night</string>
+    <string name="pref_isServiceEnabledTitle">Ativar</string>
+    <string name="pref_isServiceEnabledSummary">Ativar Silent Night</string>
+    <string name="pref_silentModeStartAt">Hora de Início</string>
+    <string name="pref_silentModeEndAt">Hora de Fim</string>
+    <string name="pref_airplaneModeTitle">Modo de Avião</string>
+    <string name="pref_airplaneModeSummary">Modo de Avião Ativado</string>
+    <string name="pref_set">Definir</string>
+    <string name="pref_cancel">Cancelar</string>
+    <string name="pref_contactDeveloperTitle">Contactar o Desenvolvedor</string>
+    <string name="pref_contactDeveloperSummary">Diz-me os problemas que encontraste</string>
+    <string name="pref_rateTitle">Classificar</string>
+    <string name="pref_rateSummary">Classificar a aplicação na Google Play</string>
+    <string name="pref_email">artemyankovskiy@gmail.com</string>
+    <string name="pref_selectEmailApplication">Selecionar a aplicação de email</string>
+    <string name="pref_suModeTitle">SU</string>
+    <string name="pref_suModeSummary">Ativar o root antes de mudar para o Modo de Avião (A mando do Android 4.2+, precisa de um smartphone com root)</string>
+    <string name="pref_disableSoundTitle">Desativar o Som</string>
+    <string name="pref_disableSoundSummary">Desligar o Som</string>
+</resources>
